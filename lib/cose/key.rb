@@ -14,7 +14,7 @@ module COSE
     KTY_RSA = 3
     KTY_SYMMETRIC = 4
 
-    attr_accessor :kty, :kid, :alg, :ops, :base_iv
+    attr_accessor :kty, :kid, :alg, :ops, :base_iv, :raw
 
     def initialize(attrs = {})
       self.kty = attrs[KTY]
@@ -32,6 +32,10 @@ module COSE
       raise 'Implement me'
     end
 
+    def to_s
+      raw
+    end
+
     def to_pem
       to_key.to_pem
     end
@@ -42,7 +46,9 @@ module COSE
 
     class << self
       def decode(cbor)
-        detect CBOR.decode(cbor)
+        key = detect CBOR.decode(cbor)
+        key.raw = cbor
+        key
       end
 
       def detect(attrs = {})

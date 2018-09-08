@@ -10,6 +10,7 @@ RSpec.describe COSE::Key do
     -----END PUBLIC KEY-----
     PEM
   end
+  let(:ec2_key) { OpenSSL::PKey::EC.new ec2_pem }
   let(:decoded) { COSE::Key.decode cbor }
 
   context 'for EC keys' do
@@ -33,6 +34,21 @@ RSpec.describe COSE::Key do
     describe '#to_key' do
       subject { decoded.to_key }
       it { should be_instance_of OpenSSL::PKey::EC }
+    end
+
+    # describe '#to_s' do
+    #   subject { decoded.to_s }
+    #   it { should == ec2_cbor }
+    # end
+
+    describe '#to_pem' do
+      subject { decoded.to_pem }
+      it { should == ec2_pem }
+    end
+
+    describe '#to_text' do
+      subject { decoded.to_text }
+      it { should == ec2_key.to_text }
     end
   end
 
