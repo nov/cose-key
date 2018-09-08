@@ -1,4 +1,4 @@
-module Cose
+module COSE
   class Key
     class RSA < Key
       N = -1

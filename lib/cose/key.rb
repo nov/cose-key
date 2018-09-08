@@ -1,6 +1,6 @@
 require 'openssl'
 
-module Cose
+module COSE
   class Key
     KTY = 1
     KID = 2

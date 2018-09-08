@@ -1,4 +1,4 @@
-module Cose
+module COSE
   class Key
     class EC2 < Key
       CRV = -1
