@@ -14,7 +14,7 @@ module COSE
       P384 = 2
       P521 = 3
 
-      attr_accessor :crv, :x, :y
+      attr_accessor :crv, :x, :y, :d
 
       def initialize(attrs = {})
         super

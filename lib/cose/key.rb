@@ -1,4 +1,5 @@
 require 'openssl'
+require 'cbor'
 
 module COSE
   class Key
@@ -15,21 +16,29 @@ module COSE
 
     attr_accessor :kty, :kid, :alg, :ops, :base_iv
 
-    def initialize(attr = {})
-      self.kty = attr[KTY]
-      self.kid = attr[KID]
-      self.alg = attr[ALG]
-      self.ops = attr[OPS]
-      self.base_iv = attr[BASE_IV]
+    def initialize(attrs = {})
+      self.kty = attrs[KTY]
+      self.kid = attrs[KID]
+      self.alg = attrs[ALG]
+      self.ops = attrs[OPS]
+      self.base_iv = attrs[BASE_IV]
+    end
+
+    def digest
+      raise 'Implement me'
+    end
+
+    def to_key
+      raise 'Implement me'
     end
 
     class << self
       def decode(cbor)
-        new CBOR.decode(cbor)
+        detect CBOR.decode(cbor)
       end
 
-      def new(attrs = {})
-        klass = case attr[KTY]
+      def detect(attrs = {})
+        klass = case attrs[KTY]
         when KTY_OKP
           raise 'Unsupported Key Type: OKP'
         when KTY_EC2
@@ -41,7 +50,7 @@ module COSE
         else
           raise 'Unknown Key Type'
         end
-        klass.new attr
+        klass.new attrs
       end
     end
   end
