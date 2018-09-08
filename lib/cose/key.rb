@@ -32,6 +32,14 @@ module COSE
       raise 'Implement me'
     end
 
+    def to_pem
+      to_key.to_pem
+    end
+
+    def to_text
+      to_key.to_text
+    end
+
     class << self
       def decode(cbor)
         detect CBOR.decode(cbor)
