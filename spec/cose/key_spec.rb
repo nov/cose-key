@@ -10,10 +10,10 @@ RSpec.describe COSE::Key do
     -----END PUBLIC KEY-----
     PEM
   end
+  let(:decoded) { COSE::Key.decode cbor }
 
   context 'for EC keys' do
     let(:cbor) { ec2_cbor }
-    let(:decoded) { COSE::Key.decode cbor }
 
     describe '.decode' do
       subject { decoded }
