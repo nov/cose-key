@@ -3,6 +3,10 @@ require 'cbor'
 
 module COSE
   class Key
+    class Exception < StandardError; end
+    class UknownAlgorithm < Exception; end
+    class NotImplementedError < NotImplementedError; end
+
     KTY = 1
     KID = 2
     ALG = 3
@@ -25,15 +29,15 @@ module COSE
     end
 
     def alg_key
-      raise 'Implement me'
+      raise NotImplementedError, 'Implement me'
     end
 
     def digest
-      raise 'Implement me'
+      raise NotImplementedError, 'Implement me'
     end
 
     def to_key
-      raise 'Implement me'
+      raise NotImplementedError, 'Implement me'
     end
 
     class << self
@@ -46,15 +50,15 @@ module COSE
       def detect(attrs = {})
         klass = case attrs[KTY]
         when KTY_OKP
-          raise 'Unsupported Key Type: OKP'
+          raise NotImplementedError, 'Unsupported Key Type: OKP'
         when KTY_EC2
           EC2
         when KTY_RSA
           RSA
         when KTY_SYMMETRIC
-          raise 'Unsupported Key Type: Symmetric'
+          raise NotImplementedError, 'Unsupported Key Type: Symmetric'
         else
-          raise 'Unknown Key Type'
+          raise UknownAlgorithm, 'Unknown Key Type'
         end
         klass.new attrs
       end

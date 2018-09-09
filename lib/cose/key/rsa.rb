@@ -35,7 +35,7 @@ module COSE
 
       def alg_key
         ALGS.invert[alg] or
-        raise 'Unknown Algorithm'
+        raise UknownAlgorithm, 'Unknown Algorithm'
       end
 
       def digest

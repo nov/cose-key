@@ -29,12 +29,12 @@ module COSE
 
       def alg_key
         ALGS.invert[alg] or
-        raise 'Unknown Algorithm'
+        raise UknownAlgorithm, 'Unknown Algorithm'
       end
 
       def crv_key
         CRVS.invert[crv] or
-        raise 'Unknown Curve'
+        raise UknownAlgorithm, 'Unknown Curve'
       end
 
       def crv_name
