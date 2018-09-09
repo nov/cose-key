@@ -10,12 +10,14 @@ module COSE
       DQ = -7
       QI = -8
 
-      PS256 = -37
-      PS384 = -38
-      PS512 = -39
-      RSAES_OAEP_SHA1   = -40
-      RSAES_OAEP_SHA256 = -41
-      RSAES_OAEP_SHA512 = -42
+      ALGS = {
+        PS256: -37,
+        PS384: -38,
+        PS512: -39,
+        RSAES_OAEP_SHA1: -40,
+        RSAES_OAEP_SHA256: -41,
+        RSAES_OAEP_SHA512: -42
+      }
 
       attr_accessor :n, :e, :d, :p, :q, :dp, :dq, :qi
 
@@ -31,18 +33,21 @@ module COSE
         self.qi = attrs[QI]
       end
 
+      def alg_key
+        ALGS.invert[alg] or
+        raise 'Unknown Algorithm'
+      end
+
       def digest
-        case alg
-        when RSAES_OAEP_SHA1
+        case alg_key
+        when :RSAES_OAEP_SHA1
           OpenSSL::Digest::SHA1
-        when PS256, RSAES_OAEP_SHA256
+        when :PS256, :RSAES_OAEP_SHA256
           OpenSSL::Digest::SHA256
-        when PS384
+        when :PS384
           OpenSSL::Digest::SHA384
-        when PS512, RSAES_OAEP_SHA512
+        when :PS512, :RSAES_OAEP_SHA512
           OpenSSL::Digest::SHA512
-        else
-          raise 'Unknown Algorithm'
         end.new
       end
 

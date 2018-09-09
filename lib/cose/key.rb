@@ -24,24 +24,16 @@ module COSE
       self.base_iv = attrs[BASE_IV]
     end
 
+    def alg_key
+      raise 'Implement me'
+    end
+
     def digest
       raise 'Implement me'
     end
 
     def to_key
       raise 'Implement me'
-    end
-
-    def to_s
-      raw
-    end
-
-    def to_pem
-      to_key.to_pem
-    end
-
-    def to_text
-      to_key.to_text
     end
 
     class << self

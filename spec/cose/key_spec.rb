@@ -21,8 +21,23 @@ RSpec.describe COSE::Key do
       it { should be_instance_of COSE::Key::EC2 }
     end
 
-    describe '#curve_name' do
-      subject { decoded.curve_name }
+    describe '#raw' do
+      subject { decoded.raw }
+      it { should == ec2_cbor }
+    end
+
+    describe '#alg_key' do
+      subject { decoded.alg_key }
+      it { should == :ES256 }
+    end
+
+    describe '#crv_key' do
+      subject { decoded.crv_key }
+      it { should == :P256 }
+    end
+
+    describe '#crv_name' do
+      subject { decoded.crv_name }
       it { should == 'prime256v1' }
     end
 
@@ -34,21 +49,6 @@ RSpec.describe COSE::Key do
     describe '#to_key' do
       subject { decoded.to_key }
       it { should be_instance_of OpenSSL::PKey::EC }
-    end
-
-    # describe '#to_s' do
-    #   subject { decoded.to_s }
-    #   it { should == ec2_cbor }
-    # end
-
-    describe '#to_pem' do
-      subject { decoded.to_pem }
-      it { should == ec2_pem }
-    end
-
-    describe '#to_text' do
-      subject { decoded.to_text }
-      it { should == ec2_key.to_text }
     end
   end
 
