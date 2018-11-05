@@ -69,6 +69,10 @@ module COSE
         end
         key
       end
+
+      def verify(signature, signature_base_string)
+        to_key.verify_pss digest, signature, signature_base_string
+      end
     end
   end
 end

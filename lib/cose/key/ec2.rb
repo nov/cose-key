@@ -72,6 +72,11 @@ module COSE
         )
         key
       end
+
+      def verify(signature, signature_base_string)
+        public_key = to_key
+        public_key.verify digest, signature, signature_base_string
+      end
     end
   end
 end
