@@ -40,6 +40,10 @@ module COSE
       raise NotImplementedError, 'Implement me'
     end
 
+    def verify(signature, signature_base_string)
+      raise NotImplementedError, 'Implement me'
+    end
+
     class << self
       def decode(cbor)
         key = detect CBOR.decode(cbor)
