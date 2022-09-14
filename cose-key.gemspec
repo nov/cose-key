@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
   gem.required_ruby_version = '>= 2.3'
   gem.add_runtime_dependency 'cbor'
-  gem.add_development_dependency 'rake', '~> 10.0'
+  gem.add_development_dependency 'rake'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rspec-its'
