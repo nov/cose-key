@@ -60,17 +60,31 @@ module COSE
       end
 
       def to_key
-        key = OpenSSL::PKey::EC.new crv_name
-        key.private_key = OpenSSL::BN.new(d, 2) if d
-        key.public_key = OpenSSL::PKey::EC::Point.new(
+        point = OpenSSL::PKey::EC::Point.new(
           OpenSSL::PKey::EC::Group.new(crv_name),
-          OpenSSL::BN.new([
-            '04' +
-            x.unpack('H*').first +
-            y.unpack('H*').first
-          ].pack('H*'), 2)
+          OpenSSL::BN.new(['04' + x.unpack('H*').first + y.unpack('H*').first].pack('H*'), 2)
         )
-        key
+
+        # Public key
+        data_sequence = OpenSSL::ASN1::Sequence([
+          OpenSSL::ASN1::Sequence([
+            OpenSSL::ASN1::ObjectId("id-ecPublicKey"),
+            OpenSSL::ASN1::ObjectId(crv_name)
+          ]),
+          OpenSSL::ASN1::BitString(point.to_octet_string(:uncompressed))
+        ])
+
+        if d
+          # Private key
+          data_sequence = OpenSSL::ASN1::Sequence([
+            OpenSSL::ASN1::Integer(1),
+            OpenSSL::ASN1::OctetString(OpenSSL::BN.new(d, 2).to_s(2)),
+            OpenSSL::ASN1::ObjectId(crv_name, 0, :EXPLICIT),
+            OpenSSL::ASN1::BitString(point.to_octet_string(:uncompressed), 1, :EXPLICIT)
+          ])
+        end
+
+        OpenSSL::PKey::EC.new(data_sequence.to_der)
       end
 
       def verify(signature, signature_base_string)
